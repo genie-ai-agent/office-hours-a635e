@@ -200,17 +200,19 @@
     return `${EMBED}?ids=${[].concat(ids).map(encodeURIComponent).join(",")}&bg=%230A0A0A&subs=karaoke`;
   }
 
+  const openModal = (html) =>
+    window.OHModal ? window.OHModal.open(html) : (($("#modalBody").innerHTML = html), ($("#modal").hidden = false));
+
   function play(id, title, user) {
-    $("#modalBody").innerHTML = `
-      <h3>${title ? esc(title) : "Jelly"}</h3>
+    openModal(`
+      <h3 id="modalTitle">${title ? esc(title) : "Jelly"}</h3>
       <p class="modal-sub">@${esc(user)} \u00b7 played through JellyJelly's own embed</p>
       <div class="embed-wrap"><iframe class="embed-frame" src="${esc(embedUrl(id))}"
         title="JellyJelly player" allow="autoplay; fullscreen; picture-in-picture"
         allowfullscreen loading="lazy"></iframe></div>
-      <div class="receipt">GET /embed?ids=${esc(id)}&amp;bg=%230A0A0A&amp;subs=karaoke
+      <div class="receipt" tabindex="0">GET /embed?ids=${esc(id)}&amp;bg=%230A0A0A&amp;subs=karaoke
  jelly_id ${esc(id)} \u00b7 host @${esc(user)} \u00b7 captions from transcript_overlay</div>
-      <p class="modal-note">This is the real jelly, live from JellyJelly. In Office Hours, an answer jelly renders in exactly this frame, attached to the paid request.</p>`;
-    $("#modal").hidden = false;
+      <p class="modal-note">The real jelly, live from JellyJelly. An answer renders in exactly this frame, attached to the paid request.</p>`);
   }
 
   function bindPlay() {
@@ -230,19 +232,18 @@
       b.addEventListener("click", () => {
         const h = m.hosts.find((x) => x.username === b.dataset.ask);
         if (!h) return;
-        $("#modalBody").innerHTML = `
-          <h3>Request a jelly from @${esc(h.username)}</h3>
+        openModal(`
+          <h3 id="modalTitle">Request a jelly from @${esc(h.username)}</h3>
           <ol>
             <li>Question capped at 500 characters, one topic tag from ${h.topics.map((t) => esc(t)).join(", ")}.</li>
             <li>${money(h.jelly_price)} authorized now, captured when the answer jelly posts.</li>
             <li>Host has 5 days to answer or the hold is released automatically.</li>
             <li>Answer lands as a jelly, linked to the request, visible to you first.</li>
           </ol>
-          <div class="receipt">jelly_request \u00b7 host @${esc(h.username)} \u00b7 ${money(h.jelly_price)} held
+          <div class="receipt" tabindex="0">jelly_request \u00b7 host @${esc(h.username)} \u00b7 ${money(h.jelly_price)} held
  price_snapshot ${money(h.jelly_price)} \u00b7 sla 5d \u00b7 status awaiting_answer
  topics ${h.topics.join(" / ")} \u00b7 seeded from ${h.jelly_count} public jellies</div>
-          <p class="modal-note">Illustrative. Real requests need auth, payments, and a queue.</p>`;
-        $("#modal").hidden = false;
+          <p class="modal-note">Illustrative. Real requests need auth, payments, and a queue.</p>`);
       });
     });
   }

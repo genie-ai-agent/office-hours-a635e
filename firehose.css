@@ -13,7 +13,8 @@
   background:rgba(255,255,255,.04);border-color:var(--line-d);color:rgba(255,255,255,.72);
 }
 .section.dark .btn-pink{background:transparent;color:#fff;border-color:var(--line-d)}
-.section.dark .btn-pink:hover{background:rgba(255,255,255,.07)}
+@media (hover:hover){.section.dark .btn-pink:hover{background:rgba(255,255,255,.07)}}
+.section.dark .btn-pink:active{background:rgba(255,255,255,.12)}
 
 /* status + request line */
 .fh-head{margin-top:30px}
@@ -92,7 +93,9 @@
   background:var(--ink);display:flex;align-items:center;gap:11px;padding:9px 11px;
   cursor:pointer;transition:background .16s ease;
 }
-.reel-item:hover,.reel-item:focus-visible{background:rgba(255,255,255,.05);outline:none}
+@media (hover:hover){.reel-item:hover{background:rgba(255,255,255,.05)}}
+.reel-item:focus-visible{background:rgba(255,255,255,.05)}
+.reel-item:active{background:rgba(255,255,255,.1)}
 .reel-item img,.reel-fb{width:34px;height:44px;border-radius:6px;object-fit:cover;flex:0 0 auto;background:rgba(255,255,255,.07)}
 .reel-txt{min-width:0;flex:1}
 .reel-txt strong{display:block;font-size:12.5px;font-weight:500;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -107,7 +110,8 @@
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
 }
 .fh-marquee ul{display:flex;gap:10px;width:max-content;animation:slide 60s linear infinite}
-.fh-marquee:hover ul{animation-play-state:paused}
+.fh-marquee:hover ul,.fh-marquee:focus-within ul{animation-play-state:paused}
+@media (prefers-reduced-motion:reduce){.fh-marquee ul{animation:none}}
 @keyframes slide{to{transform:translateX(-50%)}}
 .fh-marquee .reel-item{
   border:1px solid var(--line-d2);border-radius:999px;padding:7px 14px 7px 8px;flex:0 0 auto;max-width:260px;

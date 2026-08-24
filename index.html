@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Office Hours on JellyJelly — get paid for what you know</title>
+<title>Office Hours on JellyJelly &mdash; get paid for what you know</title>
 <meta name="description" content="Office Hours on JellyJelly: list your topics, set your prices, and let people book a live 1:1 or request a jelly answer. Product spec + pitch.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,6 +13,8 @@
 </head>
 <body>
 
+<a class="skip" href="#top">Skip to content</a>
+
 <header class="nav">
   <a class="brand" href="#top"><span class="blob"></span> Office&nbsp;Hours</a>
   <nav class="nav-links">
@@ -20,7 +22,7 @@
     <a href="#firehose">Firehose</a>
     <a href="#profile">Profile</a>
     <a href="#pricing">Pricing</a>
-    <a href="#specs">Specs</a>
+    <a href="#specs">Spec</a>
   </nav>
   <a class="btn btn-sm" href="#pricing">Set my rates</a>
 </header>
@@ -30,7 +32,7 @@
   <section class="hero">
     <p class="kicker">A new surface on JellyJelly</p>
     <h1>Get paid for what you<br><span class="rainbow">already know</span>.</h1>
-    <p class="lede">List your topics. People book a live 1:1 or send a question you answer as a jelly. Paid up front, at your price.</p>
+    <p class="lede">List your topics. People book a live 1:1, or send a question you answer as a jelly. Paid up front, at your price.</p>
     <div class="hero-cta">
       <a class="btn" href="#how">See how it works</a>
       <a class="btn btn-ghost" href="#specs">Read the spec</a>
@@ -45,49 +47,47 @@
 
   <section class="section" id="modes">
     <h2 class="h2">Two ways in</h2>
-    <p class="sub">One profile, one wallet, two levels of commitment.</p>
     <div class="mode-grid" id="modeGrid"></div>
   </section>
 
   <section class="section band" id="how">
     <h2 class="h2">How it works</h2>
-    <div class="tabs" role="tablist">
-      <button class="tab is-active" data-flow="host" role="tab">I'm hosting</button>
-      <button class="tab" data-flow="asker" role="tab">I'm asking</button>
+    <div class="tabs" role="tablist" aria-label="Choose a point of view">
+      <button class="tab is-active" id="tab-host" data-flow="host" role="tab" aria-selected="true" aria-controls="steps" tabindex="0">I'm hosting</button>
+      <button class="tab" id="tab-asker" data-flow="asker" role="tab" aria-selected="false" aria-controls="steps" tabindex="-1">I'm asking</button>
     </div>
-    <ol class="steps" id="steps"></ol>
+    <ol class="steps" id="steps" role="tabpanel" aria-labelledby="tab-host" tabindex="0"></ol>
   </section>
 
   <section class="section dark" id="firehose">
     <h2 class="h2">Wired to the firehose</h2>
     <p class="sub">No empty form. Office Hours reads the JellyJelly firehose and drafts your profile: topics, proof, a starting price.</p>
-    <div class="fh-head"><span class="fh-status" id="fhStatus"><span class="fh-dot dot-amber"></span>reading the firehose&hellip;</span></div>
+    <div class="fh-head"><span class="fh-status" id="fhStatus" role="status"><span class="fh-dot dot-amber"></span>reading the firehose&hellip;</span></div>
     <p class="fh-req"><b>GET</b> <span id="fhReq">https://api.jellyjelly.com/v3/jelly/search?sort_by=date&amp;page_size=50</span></p>
 
     <h3 class="h3">What the network talks about</h3>
-    <p class="sub sub-sm">Topic counts across the newest jellies, with the base live rate suggested for each.</p>
     <ul class="fh-bars" id="fhBars"></ul>
 
     <h3 class="h3">Live off the feed</h3>
-    <p class="sub sub-sm">Newest jellies in JellyJelly's own player. Same frame an answer jelly lands in.</p>
+    <p class="sub sub-sm">Newest jellies in JellyJelly's own player. Same frame an answer lands in.</p>
     <div class="fh-featured" id="fhFeatured"></div>
 
-    <h3 class="h3">Drafted hosts, straight from the feed</h3>
-    <p class="sub sub-sm">Real creators, topics inferred from their own posts. Nobody typed a bio. Prices are suggestions the host can overwrite.</p>
+    <h3 class="h3">Drafted hosts</h3>
+    <p class="sub sub-sm">Real creators, topics inferred from their own posts. Nobody typed a bio.</p>
     <div class="host-grid" id="fhHosts"></div>
     <div class="fh-marquee"><ul id="fhTicker"></ul></div>
   </section>
 
   <section class="section band" id="profile">
     <h2 class="h2">Anatomy of a profile</h2>
-    <p class="sub">Everything a visitor needs in ten seconds: what you know, what it costs, how fast you reply.</p>
+    <p class="sub">What a visitor needs in ten seconds: your topics, both prices, how fast you reply.</p>
     <div class="profile-wrap">
       <article class="card profile-card">
         <div class="pc-top">
-          <div class="avatar">MJ</div>
+          <div class="avatar" aria-hidden="true">MJ</div>
           <div>
             <h3>Maja</h3>
-            <p class="handle">@maja · pb &amp; j</p>
+            <p class="handle">@maja &middot; pb &amp; j</p>
             <p class="badge-line"><span class="pill pill-mint">Replies in ~2 days</span> <span class="pill pill-blue">14 jellies answered</span></p>
           </div>
         </div>
@@ -112,32 +112,32 @@
 
   <section class="section" id="pricing">
     <h2 class="h2">You set the price</h2>
-    <p class="sub">Per-offer pricing, not a platform rate card. Drag to see what a week is worth.</p>
+    <p class="sub">Per-offer, not a platform rate card. Drag to see what a week is worth.</p>
     <div class="calc card">
       <div class="calc-controls">
         <label>Live session price
-          <output id="outLive">$120</output>
+          <output id="outLive" for="inLive">$120</output>
           <input type="range" id="inLive" min="0" max="600" step="10" value="120">
         </label>
         <label>Live sessions per week
-          <output id="outLiveQty">3</output>
+          <output id="outLiveQty" for="inLiveQty">3</output>
           <input type="range" id="inLiveQty" min="0" max="20" step="1" value="3">
         </label>
         <label>Jelly answer price
-          <output id="outJelly">$35</output>
+          <output id="outJelly" for="inJelly">$35</output>
           <input type="range" id="inJelly" min="0" max="250" step="5" value="35">
         </label>
         <label>Jellies per week
-          <output id="outJellyQty">6</output>
+          <output id="outJellyQty" for="inJellyQty">6</output>
           <input type="range" id="inJellyQty" min="0" max="40" step="1" value="6">
         </label>
       </div>
-      <div class="calc-out">
+      <div class="calc-out" aria-live="polite">
         <p class="calc-cap">Gross per month</p>
         <p class="calc-big" id="outGross">$2,280</p>
-        <p class="calc-cap">You keep after 10% platform fee + card fees</p>
+        <p class="calc-cap">You keep after fees</p>
         <p class="calc-mid" id="outNet">$1,975</p>
-        <p class="calc-note" id="outHours">≈ 1.5 hrs of live time + 6 jellies a week</p>
+        <p class="calc-note" id="outHours">&asymp; 1.5 hrs of live time + 6 jellies a week</p>
       </div>
     </div>
     <div class="fee-grid" id="feeGrid"></div>
@@ -145,23 +145,18 @@
 
   <section class="section band" id="specs">
     <h2 class="h2">The spec</h2>
-    <p class="sub">What has to exist to ship. Tap to open.</p>
+    <p class="sub">What has to exist to ship.</p>
     <div class="spec-list" id="specList"></div>
   </section>
 
   <section class="section" id="policies">
-    <h2 class="h2">Money, no-shows, and refunds</h2>
+    <h2 class="h2">Money, no-shows, refunds</h2>
     <div class="policy-grid" id="policyGrid"></div>
   </section>
 
   <section class="section band" id="roadmap">
     <h2 class="h2">Ship order</h2>
     <div class="road" id="road"></div>
-  </section>
-
-  <section class="section" id="faq">
-    <h2 class="h2">FAQ</h2>
-    <div class="faq-list" id="faqList"></div>
   </section>
 
   <section class="closer">
@@ -173,13 +168,13 @@
 </main>
 
 <footer class="foot">
-  <p><strong>Office Hours</strong> — a product spec for JellyJelly.</p>
-  <p class="muted">Host cards, topics, and prices are built from the public JellyJelly firehose (<code>GET /v3/jelly/search</code>). Booking and payment flows are illustrative; the live version needs a backend.</p>
+  <p><strong>Office Hours</strong> &mdash; a product spec for JellyJelly.</p>
+  <p class="muted">Host cards, topics, and prices come from the public firehose (<code>GET /v3/jelly/search</code>). Booking and payment flows are illustrative; the live version needs a backend.</p>
 </footer>
 
-<div class="modal" id="modal" hidden>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
   <div class="modal-card card">
-    <button class="modal-x" id="modalX" aria-label="Close">×</button>
+    <button class="modal-x" id="modalX" aria-label="Close">&times;</button>
     <div id="modalBody"></div>
   </div>
 </div>
