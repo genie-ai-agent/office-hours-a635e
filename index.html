@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Office Hours on JellyJelly — get paid for what you know</title>
+<meta name="description" content="Office Hours on JellyJelly: list your topics, set your prices, and let people book a live 1:1 or request a jelly answer. Product spec + pitch.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="nav">
+  <a class="brand" href="#top"><span class="blob"></span> Office&nbsp;Hours</a>
+  <nav class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="#profile">Profile</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#specs">Specs</a>
+  </nav>
+  <a class="btn btn-sm" href="#pricing">Set my rates</a>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <p class="kicker">A new surface on JellyJelly</p>
+    <h1>Get paid for what you<br><span class="rainbow">already know</span>.</h1>
+    <p class="lede">List the topics you're happy to be asked about. People either book a live 1:1 with you, or drop a question and get an answer back as a jelly. Both are paid up front. You set the price.</p>
+    <div class="hero-cta">
+      <a class="btn" href="#how">See how it works</a>
+      <a class="btn btn-ghost" href="#specs">Read the spec</a>
+    </div>
+    <ul class="hero-stats">
+      <li><strong>2</strong><span>ways to book</span></li>
+      <li><strong>0</strong><span>back-and-forth DMs</span></li>
+      <li><strong>100%</strong><span>paid before you show up</span></li>
+    </ul>
+  </section>
+
+  <section class="section" id="modes">
+    <h2 class="h2">Two ways in</h2>
+    <p class="sub">Same profile, same wallet, two very different levels of commitment.</p>
+    <div class="mode-grid" id="modeGrid"></div>
+  </section>
+
+  <section class="section band" id="how">
+    <h2 class="h2">How it works</h2>
+    <div class="tabs" role="tablist">
+      <button class="tab is-active" data-flow="host" role="tab">I'm hosting</button>
+      <button class="tab" data-flow="asker" role="tab">I'm asking</button>
+    </div>
+    <ol class="steps" id="steps"></ol>
+  </section>
+
+  <section class="section" id="profile">
+    <h2 class="h2">Anatomy of an Office Hours profile</h2>
+    <p class="sub">Everything a visitor needs to decide in ten seconds: what you know, what it costs, how fast you reply.</p>
+    <div class="profile-wrap">
+      <article class="card profile-card">
+        <div class="pc-top">
+          <div class="avatar">MJ</div>
+          <div>
+            <h3>Maja</h3>
+            <p class="handle">@maja · pb &amp; j</p>
+            <p class="badge-line"><span class="pill pill-mint">Replies in ~2 days</span> <span class="pill pill-blue">14 jellies answered</span></p>
+          </div>
+        </div>
+        <p class="pc-label">Ask me about</p>
+        <div class="topic-row" id="topicRow"></div>
+        <div class="offer-row">
+          <div class="offer">
+            <p class="offer-kind">Live 1:1</p>
+            <p class="offer-price">$120<span>/ 30 min</span></p>
+            <button class="btn btn-block" data-demo="live">Book a time</button>
+          </div>
+          <div class="offer">
+            <p class="offer-kind">Jelly answer</p>
+            <p class="offer-price">$35<span>/ question</span></p>
+            <button class="btn btn-block btn-pink" data-demo="jelly">Request a jelly</button>
+          </div>
+        </div>
+      </article>
+      <ul class="anno" id="anno"></ul>
+    </div>
+  </section>
+
+  <section class="section band" id="pricing">
+    <h2 class="h2">You set the price</h2>
+    <p class="sub">Per-offer pricing, not a platform-wide rate card. Drag the sliders to see what a week of office hours is worth.</p>
+    <div class="calc card">
+      <div class="calc-controls">
+        <label>Live session price
+          <output id="outLive">$120</output>
+          <input type="range" id="inLive" min="0" max="600" step="10" value="120">
+        </label>
+        <label>Live sessions per week
+          <output id="outLiveQty">3</output>
+          <input type="range" id="inLiveQty" min="0" max="20" step="1" value="3">
+        </label>
+        <label>Jelly answer price
+          <output id="outJelly">$35</output>
+          <input type="range" id="inJelly" min="0" max="250" step="5" value="35">
+        </label>
+        <label>Jellies per week
+          <output id="outJellyQty">6</output>
+          <input type="range" id="inJellyQty" min="0" max="40" step="1" value="6">
+        </label>
+      </div>
+      <div class="calc-out">
+        <p class="calc-cap">Gross per month</p>
+        <p class="calc-big" id="outGross">$2,280</p>
+        <p class="calc-cap">You keep after 10% platform fee + card fees</p>
+        <p class="calc-mid" id="outNet">$1,975</p>
+        <p class="calc-note" id="outHours">≈ 1.5 hrs of live time + 6 jellies a week</p>
+      </div>
+    </div>
+    <div class="fee-grid" id="feeGrid"></div>
+  </section>
+
+  <section class="section" id="specs">
+    <h2 class="h2">The spec</h2>
+    <p class="sub">What has to exist for this to ship. Tap a section to open it.</p>
+    <div class="spec-list" id="specList"></div>
+  </section>
+
+  <section class="section band" id="policies">
+    <h2 class="h2">Money, no-shows, and refunds</h2>
+    <div class="policy-grid" id="policyGrid"></div>
+  </section>
+
+  <section class="section" id="roadmap">
+    <h2 class="h2">Ship order</h2>
+    <div class="road" id="road"></div>
+  </section>
+
+  <section class="section band" id="faq">
+    <h2 class="h2">FAQ</h2>
+    <div class="faq-list" id="faqList"></div>
+  </section>
+
+  <section class="closer">
+    <h2>Open your office hours.</h2>
+    <p>Pick your topics, name your price, let the calendar and the jellies do the rest.</p>
+    <a class="btn btn-big" href="#profile">Build my profile</a>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <p><strong>Office Hours</strong> — a product spec for JellyJelly.</p>
+  <p class="muted">Prototype page. Booking and payment flows are illustrative; the live version needs a backend.</p>
+</footer>
+
+<div class="modal" id="modal" hidden>
+  <div class="modal-card card">
+    <button class="modal-x" id="modalX" aria-label="Close">×</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
