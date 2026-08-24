@@ -129,6 +129,22 @@ window.OH = {
       ]
     },
     {
+      title: "Firehose integration",
+      body: "Office Hours has a cold-start problem: nobody wants to fill in a topics form. The JellyJelly firehose already knows what you talk about, so the profile arrives pre-drafted and the host just edits.",
+      list: [
+        "<strong>Topic inference.</strong> Union the <code>topics[]</code> across a host's last 200 jellies, rank by count, take the top four as draft &ldquo;ask me about&rdquo; chips. Network-wide counts from the same query become <code>Topic.demand_score</code>.",
+        "<strong>Price suggestion.</strong> <code>base = max(rate_table[topic])</code> over the draft topics, plus a volume bump of <code>min(60, 2 &times; jelly_count)</code>, rounded to $5. Jelly answers default to 28% of the live rate. Suggestions only; the host's number always wins.",
+        "<strong>Proof of work.</strong> The three newest titled jellies render as a reel on the profile straight from <code>title</code>, <code>summary</code>, and <code>thumbnail_url</code>, so an asker hears the voice before paying.",
+        "<strong>Answer delivery.</strong> An answer is just a jelly. <code>JellyRequest.answer_jelly_id</code> holds the id; playback uses the existing embed (<code>/embed?ids=&lt;jelly_id&gt;</code>) so paid answers get the same karaoke captions as the rest of the app.",
+        "<strong>Discovery ranking.</strong> <code>sort_by=likes|views|date</code> with <code>start_date</code> gives a recency-weighted signal per topic. Cache page one per topic for ten minutes; none of this needs to be real-time.",
+        "<strong>Auth.</strong> Reads are public, but monetized fields (<code>price</code>, <code>pay_to_watch</code>, video URLs) need <code>Authorization: Token</code>. So every firehose call runs server-side and the token never touches the client.",
+        "<strong>Embeds are the live path.</strong> <code>/embed?ids=a,b&amp;bg=%23hex&amp;subs=karaoke</code> ships <code>frame-ancestors *</code>, so the player frames from any origin. That's why the jellies on this page really play: ids come from the firehose, pixels and captions come from JellyJelly at view time. Answer jellies reuse the same frame, so Office Hours never has to host video.",
+        "<strong>Thumbnails expire.</strong> <code>thumbnail_url</code> is a signed CloudFront URL with an <code>Expires</code> stamp, so it can't be cached in a static build for long. Store the <code>jelly_id</code>, re-resolve the thumbnail on read, and let the embed cover playback.",
+        "<strong>CORS.</strong> The endpoint sends no <code>Access-Control-Allow-Origin</code>, so a browser on another origin can't read it directly. This page demonstrates that honestly: it attempts a live read on load and falls back to a dated snapshot when blocked. Production reads it from the backend and serves its own JSON."
+      ],
+      code: "GET /v3/jelly/search?sort_by=date&ascending=false&page=1&page_size=50\nHost: api.jellyjelly.com\n\n{ status, total, page, page_size, jellies: [ {\n    id, post_type, started_by_id,\n    participants: [{ id, username, full_name, pfp_url, wobbles_badge_no }],\n    title, summary, topics: [\"startups\",\"tech\"],\n    thumbnail_url, transcript_overlay, posted_at\n} ] }\n\n-- derived by the Office Hours indexer --\nhost_draft  username, topics[4], jelly_count,\n            suggested_live_cents, suggested_jelly_cents,\n            reel[3] -> {jelly_id, title, thumbnail_url}\ntopic_stats topic, count_30d, base_rate_cents"
+    },
+    {
       title: "Discovery",
       list: [
         "Topic pages listing open hosts, sorted by a blend of rating, reply speed, and availability",
