@@ -5,6 +5,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const crypto = require("node:crypto");
 const { URL } = require("node:url");
+const jellyPayment = require("./payments/jelly");
 
 const ROOT = __dirname;
 const PORT = Number(process.env.OH_PORT || 4173);
@@ -42,7 +43,7 @@ async function api(req, res, url) {
   if (req.method === "GET" && url.pathname === "/api/health") return json(res, 200, { ok: true, service: "office-hours", time: new Date().toISOString() });
   if (req.method !== "POST") return json(res, 405, { error: "method_not_allowed" });
 
-  const match = url.pathname.match(/^\/api\/(checkout|orders\/([^/]+)\/(accept|deliver))$/);
+  const match = url.pathname.match(/^\/api\/(checkout|orders\/([^/]+)\/(accept|deliver|payment))$/);
   if (!match) return json(res, 404, { error: "not_found" });
   try {
     const body = await readBody(req);
@@ -65,15 +66,23 @@ async function api(req, res, url) {
       const order = {
         id: id(kind === "live" ? "booking" : "jreq"), kind, host_username: host,
         question, price_cents: price, currency: "USD", slot_start: slot && slot.toISOString(),
-        payment: { state: "authorized", processor: "local", authorized_at: new Date().toISOString() },
-        state: kind === "live" ? "confirmed" : "submitted", idempotency_key: key || null,
+        payment: null, state: "pending_payment", idempotency_key: key || null,
         created_at: new Date().toISOString(),
       };
+      order.payment = jellyPayment.createIntent(order);
+      if (order.payment.state === "authorized") order.state = kind === "live" ? "confirmed" : "submitted";
       orders.unshift(order); writeOrders(orders);
       return json(res, 201, { order });
     }
     const order = orders.find((o) => o.id === match[2]);
     if (!order) return json(res, 404, { error: "order_not_found" });
+    if (match[3] === "payment") {
+      if (order.payment.provider !== "jelly" || order.payment.state !== "awaiting_payment") throw new Error("order is not awaiting a Jelly payment");
+      const payment = await jellyPayment.verifyTransfer(order.payment, requiredString(body.signature, "signature", 120));
+      order.payment = { ...order.payment, ...payment };
+      order.state = order.kind === "live" ? "confirmed" : "submitted";
+      writeOrders(orders); return json(res, 200, { order });
+    }
     if (match[3] === "accept") {
       if (order.kind !== "jelly" || order.state !== "submitted") throw new Error("order cannot be accepted");
       order.state = "accepted"; order.accepted_at = new Date().toISOString();

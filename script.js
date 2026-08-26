@@ -179,6 +179,22 @@
         const result = await response.json();
         if (!response.ok) throw new Error(result.error || "Checkout failed");
         const o = result.order;
+        if (o.payment.state === "awaiting_payment") {
+          $("#modalBody").innerHTML = `<h3 id="modalTitle">Pay on Jelly to continue</h3><p class="modal-sub">Send exactly ${o.payment.amount_lamports / 1e9} SOL to the Office Hours wallet, then paste the finalized transaction signature.</p><div class="receipt" tabindex="0">RECIPIENT ${o.payment.recipient}\nAMOUNT    ${o.payment.amount_lamports / 1e9} SOL\nNETWORK   Solana · finalized</div><form class="payment-form checkout-form"><label>Transaction signature<input name="signature" required autocomplete="off" placeholder="Paste the Solana signature"></label><button class="btn btn-block" type="submit">Verify Jelly payment</button><p class="form-status" role="status" aria-live="polite"></p></form>`;
+          const paymentForm = document.querySelector(".payment-form");
+          paymentForm.addEventListener("submit", async (paymentEvent) => {
+            paymentEvent.preventDefault();
+            const submit = paymentForm.querySelector("button"); const message = paymentForm.querySelector(".form-status");
+            submit.disabled = true; message.textContent = "Waiting for finalized transaction…";
+            try {
+              const verify = await fetch(`/api/orders/${encodeURIComponent(o.id)}/payment`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ signature: paymentForm.signature.value.trim() }) });
+              const verified = await verify.json();
+              if (!verify.ok) throw new Error(verified.error || "Payment verification failed");
+              $("#modalBody").innerHTML = `<h3 id="modalTitle">Payment confirmed</h3><p class="modal-sub">Your ${isLive ? "booking" : "request"} is now active.</p><div class="receipt" tabindex="0">${verified.order.id}\nSTATE    ${verified.order.state}\nPAYMENT  paid · Jelly · ${verified.order.payment.signature}</div>`;
+            } catch (error) { submit.disabled = false; message.textContent = error.message; }
+          });
+          return;
+        }
         $("#modalBody").innerHTML = `<h3 id="modalTitle">${isLive ? "Booking confirmed" : "Request submitted"}</h3><p class="modal-sub">Payment is authorized and held until delivery.</p><div class="receipt" tabindex="0">${o.id}\nHOST     @${o.host_username}\nAMOUNT   ${money(o.price_cents / 100)}\nSTATE    ${o.state}\nPAYMENT  ${o.payment.state} · local processor</div><p class="modal-note">This order is stored by the local Office Hours backend.</p>`;
       } catch (error) { button.disabled = false; status.textContent = error.message; }
     });
